@@ -10,9 +10,10 @@ app.secret_key = '464820Ms'
 def hello_world():
     return "<p>Hello, World!</p>"
 
-@app.route("/get_my_ip", methods=["GET"])
+
+@app.route("/gps", methods=["GET"])
 def get_my_ip():
-    ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     get_info_by_ip(ip=ip)
     return jsonify({'ip': request.remote_addr})
 
