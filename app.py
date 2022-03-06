@@ -3,7 +3,7 @@ import requests
 from main import get_info_by_ip
 
 app = Flask(__name__)
-
+app.secret_key = '464820Ms'
 
 @app.route("/")
 def hello_world():
