@@ -10,7 +10,6 @@ app.secret_key = '464820Ms'
 def hello_world():
     return "<p>Hello, World!</p>"
 
-
 @app.route("/get_my_ip", methods=["GET"])
 def get_my_ip():
     ip = request.remote_addr
@@ -19,7 +18,7 @@ def get_my_ip():
 
 
 @app.route('/test')
-def hello_world():
+def hello_world2():
     ip_addr = request.remote_addr
     return '<h1> Your IP address is:' + ip_addr
 
