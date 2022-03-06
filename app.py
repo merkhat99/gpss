@@ -5,6 +5,7 @@ from main import get_info_by_ip
 app = Flask(__name__)
 app.secret_key = '464820Ms'
 
+
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
@@ -17,7 +18,7 @@ def get_my_ip():
     return jsonify({'ip': request.remote_addr})
 
 
-@app.route('/main')
+@app.route('/test')
 def hello_world():
     ip_addr = request.remote_addr
     return '<h1> Your IP address is:' + ip_addr
