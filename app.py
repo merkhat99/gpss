@@ -21,7 +21,8 @@ def get_my_ip():
     data = get_info_by_ip(ip=response)
     lon = data['Lat']
     lat = data['Lon']
-    req_site = f'https://gps-coordinates.org/my-location.php?lat={lat}&lng={lon}'
+    # req_site = f'https://gps-coordinates.org/my-location.php?lat={lat}&lng={lon}'
+    req_site = f'https://gps-coordinates.org/my-location.php?lat={lon}&lng={lat}'
     msg = MIMEMultipart('alternative')
 
     html = f"""
